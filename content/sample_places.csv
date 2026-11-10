@@ -1,0 +1,5 @@
+type,name,phone,latitude,longitude,district,landmark,hours,stocks,certified,last_checked,source,is_sample
+dealer,SAMPLE Agro-dealer A,,0.3960,32.5740,Wakiso,Sample location,,Sample,false,,Sample data,true
+dealer,SAMPLE Agro-dealer B,,0.4500,32.6100,Wakiso,Sample location,,Sample,false,,Sample data,true
+clean_cuttings,SAMPLE Clean-cutting source,,0.5300,32.6200,Wakiso,Sample location,,Sample,false,,Sample data,true
+extension_office,SAMPLE Extension office,,0.4000,32.4800,Wakiso,Sample location,,,false,,Sample data,true

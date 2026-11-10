@@ -1,0 +1,12 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+backend/data/
+*.tflite
+ml/data/
+ml/export/
+ml/gate_photos.zip
+*.log
+converted_models.zip
+ml/gate_photos.zip

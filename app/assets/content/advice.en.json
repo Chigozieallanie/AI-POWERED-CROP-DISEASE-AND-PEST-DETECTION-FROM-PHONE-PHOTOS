@@ -1,0 +1,71 @@
+[
+  {
+    "class_id": "cassava_healthy",
+    "steps_now": ["No problem was found on these leaves. Keep checking your plants regularly."],
+    "prevention": ["Plant clean cuttings from a trusted source.", "Remove any plant that starts to show disease."],
+    "do_not": [],
+    "safety": []
+  },
+  {
+    "class_id": "cassava_mosaic",
+    "steps_now": ["Ask an extension officer to confirm the problem.", "Remove infected plants so the disease does not spread.", "Do not take cuttings from this plant."],
+    "prevention": ["Plant resistant varieties.", "Use clean, recently sourced cuttings.", "Manage whiteflies, which spread the virus."],
+    "do_not": ["Do not buy a spray to cure this. No curative product is known from our sources."],
+    "safety": []
+  },
+  {
+    "class_id": "cassava_brown_streak",
+    "steps_now": ["Ask an extension officer to confirm the problem.", "Remove infected plants so the disease does not spread.", "Do not take cuttings from this plant."],
+    "prevention": ["Use certified or tissue-culture cuttings, recently sourced.", "Avoid recycled cuttings from old fields.", "Plant away from infected fields."],
+    "do_not": ["Do not buy a spray to cure this. No curative product is known from our sources."],
+    "safety": []
+  },
+  {
+    "class_id": "maize_healthy",
+    "steps_now": ["No problem was found on these leaves. Keep checking your plants regularly."],
+    "prevention": ["Check young plants often, especially for fall armyworm."],
+    "do_not": [],
+    "safety": []
+  },
+  {
+    "class_id": "maize_leaf_blight",
+    "steps_now": ["Advice for this problem is still being prepared. Ask your nearest extension office."],
+    "prevention": [],
+    "do_not": [],
+    "safety": []
+  },
+  {
+    "class_id": "maize_streak_virus",
+    "steps_now": ["Advice for this problem is still being prepared. Ask your nearest extension office."],
+    "prevention": [],
+    "do_not": [],
+    "safety": []
+  },
+  {
+    "class_id": "fall_armyworm",
+    "steps_now": ["Check the leaves and funnel of the plants for caterpillars.", "Pick off and destroy caterpillars by hand where you can.", "Ask a certified dealer or extension officer which product is approved and how to use it."],
+    "prevention": ["Weed regularly.", "Check young maize often."],
+    "do_not": ["Do not use more product, or spray more often, than the label says."],
+    "safety": ["Wear protective clothing when spraying.", "Read the product label before use.", "Keep chemicals away from children, food and water."]
+  },
+  {
+    "class_id": "cassava_bacterial_blight",
+    "steps_now": ["Ask an extension officer to confirm the problem.", "Do not take cuttings from this plant.", "Disinfect cutting tools between plants."],
+    "prevention": ["Plant clean cuttings taken from the woody lower stem.", "Check cuttings for brown streaks inside before planting.", "Intercropping with maize or melon has been reported to reduce this disease."],
+    "do_not": ["Do not buy a spray to cure this. Our sources describe clean cuttings as the main control."],
+    "safety": []
+  },
+  {
+    "class_id": "cassava_green_mite",
+    "steps_now": ["Ask an extension officer to confirm the problem."],
+    "prevention": ["Plant clean, inspected cuttings.", "Use tolerant varieties."],
+    "do_not": ["Do not spray pesticides on the field or nearby crops. They kill the natural enemies that control this mite."],
+    "safety": []
+  },
+  {"class_id": "cassava_green_mottle", "steps_now": ["Advice for this problem is still being prepared. Ask your nearest extension office."], "prevention": [], "do_not": [], "safety": []},
+  {"class_id": "maize_rust", "steps_now": ["Advice for this problem is still being prepared. Ask your nearest extension office."], "prevention": [], "do_not": [], "safety": []},
+  {"class_id": "maize_leaf_spot", "steps_now": ["Advice for this problem is still being prepared. Ask your nearest extension office."], "prevention": [], "do_not": [], "safety": []},
+  {"class_id": "maize_lethal_necrosis", "steps_now": ["Advice for this problem is still being prepared. Ask your nearest extension office."], "prevention": [], "do_not": [], "safety": []},
+  {"class_id": "grasshopper", "steps_now": ["Advice for this problem is still being prepared. Ask your nearest extension office."], "prevention": [], "do_not": [], "safety": []},
+  {"class_id": "leaf_beetle", "steps_now": ["Advice for this problem is still being prepared. Ask your nearest extension office."], "prevention": [], "do_not": [], "safety": []}
+]

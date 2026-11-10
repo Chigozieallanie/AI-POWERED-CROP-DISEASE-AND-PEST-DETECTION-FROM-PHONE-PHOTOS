@@ -1,0 +1,17 @@
+[
+  {"id": "cassava_healthy", "crop": "cassava", "kind": "healthy", "name": "Healthy cassava"},
+  {"id": "cassava_mosaic", "crop": "cassava", "kind": "disease", "name": "Cassava mosaic", "technical_name": "Cassava mosaic disease (CMD)", "referral_type": "clean_cuttings"},
+  {"id": "cassava_brown_streak", "crop": "cassava", "kind": "disease", "name": "Cassava brown streak", "technical_name": "Cassava brown streak disease (CBSD)", "referral_type": "clean_cuttings"},
+  {"id": "maize_healthy", "crop": "maize", "kind": "healthy", "name": "Healthy maize"},
+  {"id": "maize_leaf_blight", "crop": "maize", "kind": "disease", "name": "Maize leaf blight", "technical_name": "Maize leaf blight (MLB)", "referral_type": "extension_office"},
+  {"id": "maize_streak_virus", "crop": "maize", "kind": "disease", "name": "Maize streak", "technical_name": "Maize streak virus (MSV)", "referral_type": "extension_office"},
+  {"id": "fall_armyworm", "crop": "maize", "kind": "pest", "name": "Fall armyworm", "technical_name": "Spodoptera frugiperda", "referral_type": "dealer"},
+  {"id": "cassava_bacterial_blight", "crop": "cassava", "kind": "disease", "name": "Cassava bacterial blight", "technical_name": "Cassava bacterial blight (CBB)", "referral_type": "clean_cuttings"},
+  {"id": "cassava_green_mite", "crop": "cassava", "kind": "pest", "name": "Cassava green mite", "technical_name": "Mononychellus tanajoa", "referral_type": "extension_office"},
+  {"id": "cassava_green_mottle", "crop": "cassava", "kind": "disease", "name": "Cassava green mottle", "technical_name": "Cassava green mottle (CGM)", "referral_type": "extension_office"},
+  {"id": "maize_rust", "crop": "maize", "kind": "disease", "name": "Maize rust", "referral_type": "extension_office"},
+  {"id": "maize_leaf_spot", "crop": "maize", "kind": "disease", "name": "Maize leaf spot", "referral_type": "extension_office"},
+  {"id": "maize_lethal_necrosis", "crop": "maize", "kind": "disease", "name": "Maize lethal necrosis", "technical_name": "Maize lethal necrosis (MLN)", "referral_type": "extension_office"},
+  {"id": "grasshopper", "crop": "maize", "kind": "pest", "name": "Grasshopper", "referral_type": "extension_office"},
+  {"id": "leaf_beetle", "crop": "maize", "kind": "pest", "name": "Leaf beetle", "referral_type": "extension_office"}
+]

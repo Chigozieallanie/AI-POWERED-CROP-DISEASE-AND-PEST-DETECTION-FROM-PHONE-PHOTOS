@@ -1,0 +1,40 @@
+name: crop-backend
+
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: crop
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: crop
+    ports:
+      - "127.0.0.1:5544:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U crop -d crop"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://crop:${POSTGRES_PASSWORD}@db:5432/crop
+      STORAGE_DIR: /data/storage
+      MODEL_DIR: /data/models
+      CONTENT_DIR: /content
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8010:8000"
+    volumes:
+      - api-data:/data
+
+volumes:
+  db-data:
+  api-data:

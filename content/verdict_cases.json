@@ -1,0 +1,23 @@
+{
+  "thresholds": {"healthy": 0.7, "cassava_mosaic": 0.7, "cassava_brown_streak": 0.7, "fall_armyworm": 0.7},
+  "experimental": ["fall_armyworm"],
+  "cases": [
+    {"name": "no accepted leaves", "leaves": [], "state": "not_sure", "findings": []},
+    {"name": "one diseased leaf is weak, never very likely", "leaves": [["cassava_mosaic", 0.99]], "state": "weak_evidence", "findings": [["cassava_mosaic", "weak", 1]]},
+    {"name": "two of two diseased is weak", "leaves": [["cassava_mosaic", 0.9], ["cassava_mosaic", 0.9]], "state": "weak_evidence", "findings": [["cassava_mosaic", "weak", 2]]},
+    {"name": "one of two diseased is weak", "leaves": [["cassava_mosaic", 0.9], ["healthy", 0.9]], "state": "weak_evidence", "findings": [["cassava_mosaic", "weak", 1]]},
+    {"name": "adding a healthy third leaf stays weak", "leaves": [["cassava_mosaic", 0.9], ["healthy", 0.9], ["healthy", 0.9]], "state": "weak_evidence", "findings": [["cassava_mosaic", "weak", 1]]},
+    {"name": "two of six is likely", "leaves": [["cassava_mosaic", 0.9], ["cassava_mosaic", 0.9], ["healthy", 0.9], ["healthy", 0.9], ["healthy", 0.9], ["healthy", 0.9]], "state": "problem_found", "findings": [["cassava_mosaic", "likely", 2]]},
+    {"name": "two of three is likely", "leaves": [["cassava_mosaic", 0.9], ["cassava_mosaic", 0.9], ["healthy", 0.9]], "state": "problem_found", "findings": [["cassava_mosaic", "likely", 2]]},
+    {"name": "three of six is very likely", "leaves": [["cassava_mosaic", 0.9], ["cassava_mosaic", 0.9], ["cassava_mosaic", 0.9], ["healthy", 0.9], ["healthy", 0.9], ["healthy", 0.9]], "state": "problem_found", "findings": [["cassava_mosaic", "very_likely", 3]]},
+    {"name": "three of seven style minority stays likely", "leaves": [["cassava_mosaic", 0.9], ["cassava_mosaic", 0.9], ["cassava_mosaic", 0.9], ["healthy", 0.9], ["healthy", 0.9], ["healthy", 0.9], ["healthy", 0.9]], "state": "problem_found", "findings": [["cassava_mosaic", "likely", 3]]},
+    {"name": "two problems are both reported", "leaves": [["cassava_mosaic", 0.9], ["cassava_mosaic", 0.9], ["cassava_brown_streak", 0.9], ["cassava_brown_streak", 0.9]], "state": "problem_found", "findings": [["cassava_brown_streak", "likely", 2], ["cassava_mosaic", "likely", 2]]},
+    {"name": "one strong and one weak problem", "leaves": [["cassava_mosaic", 0.9], ["cassava_mosaic", 0.9], ["cassava_brown_streak", 0.9], ["healthy", 0.9]], "state": "problem_found", "findings": [["cassava_mosaic", "likely", 2], ["cassava_brown_streak", "weak", 1]]},
+    {"name": "experimental is capped at likely", "leaves": [["fall_armyworm", 0.99], ["fall_armyworm", 0.99], ["fall_armyworm", 0.99]], "state": "problem_found", "findings": [["fall_armyworm", "likely", 3]]},
+    {"name": "three healthy leaves", "leaves": [["healthy", 0.9], ["healthy", 0.9], ["healthy", 0.9]], "state": "healthy", "findings": []},
+    {"name": "two healthy leaves are not enough", "leaves": [["healthy", 0.9], ["healthy", 0.9]], "state": "not_sure", "findings": []},
+    {"name": "uncertain leaf blocks healthy", "leaves": [["healthy", 0.9], ["healthy", 0.9], ["healthy", 0.5]], "state": "not_sure", "findings": []},
+    {"name": "all below threshold", "leaves": [["cassava_mosaic", 0.5], ["cassava_mosaic", 0.5], ["cassava_mosaic", 0.5]], "state": "not_sure", "findings": []},
+    {"name": "unknown label never counts", "leaves": [["new_label", 0.99], ["new_label", 0.99], ["new_label", 0.99]], "state": "not_sure", "findings": []}
+  ]
+}

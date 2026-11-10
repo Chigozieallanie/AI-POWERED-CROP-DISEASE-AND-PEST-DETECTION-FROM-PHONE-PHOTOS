@@ -1,0 +1,5 @@
+[
+  {"name": "free", "monthly_quota": 100, "rate_limit_per_minute": 10, "features": {}},
+  {"name": "starter", "monthly_quota": 5000, "rate_limit_per_minute": 60, "features": {}},
+  {"name": "business", "monthly_quota": 50000, "rate_limit_per_minute": 300, "features": {"white_label": true}}
+]
