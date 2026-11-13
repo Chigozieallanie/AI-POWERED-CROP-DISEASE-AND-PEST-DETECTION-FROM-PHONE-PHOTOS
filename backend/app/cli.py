@@ -21,9 +21,12 @@ from app.models import (
     Plan,
     ProblemClass,
     Tenant,
+    Worker,
+    WorkerRole,
 )
 from app.packs import publish_content_pack, publish_model
 from app.security import new_key
+from app.workers_auth import normalise_phone
 
 TRUE_VALUES = {"1", "true", "yes", "y"}
 
@@ -101,6 +104,21 @@ def create_key(db: Session, slug: str, name: str | None, plan_name: str) -> str:
     return raw_key
 
 
+def create_worker(db: Session, slug: str, phone: str, name: str, role: str) -> Worker:
+    tenant = db.scalar(select(Tenant).where(Tenant.slug == slug))
+    if tenant is None:
+        raise SystemExit(f"Unknown organisation: {slug}. Create it with create-key first.")
+    worker = Worker(
+        tenant_id=tenant.id,
+        phone=normalise_phone(phone, get_settings().default_country_code),
+        name=name,
+        role=WorkerRole(role),
+    )
+    db.add(worker)
+    db.commit()
+    return worker
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="app.cli")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -114,6 +132,12 @@ def main() -> None:
     key.add_argument("--slug", required=True)
     key.add_argument("--name")
     key.add_argument("--plan", default="free")
+
+    worker = commands.add_parser("create-worker", help="Add a paid-tier worker who signs in by phone")
+    worker.add_argument("--slug", required=True)
+    worker.add_argument("--phone", required=True)
+    worker.add_argument("--name", required=True)
+    worker.add_argument("--role", choices=[r.value for r in WorkerRole], default="worker")
 
     model = commands.add_parser("publish-model", help="Install and publish a trained model")
     model.add_argument("path", type=Path)
@@ -131,6 +155,9 @@ def main() -> None:
             print(f"Imported {import_places(db, args.path)} places.")
         elif args.command == "create-key":
             print(create_key(db, args.slug, args.name, args.plan))
+        elif args.command == "create-worker":
+            created = create_worker(db, args.slug, args.phone, args.name, args.role)
+            print(f"Added {created.name} ({created.phone}) as {created.role.value}.")
         elif args.command == "publish-model":
             pack = publish_model(db, settings, args.path, args.min_app_version)
             print(f"Published {pack.name} {pack.version}. Restart the API to load it.")

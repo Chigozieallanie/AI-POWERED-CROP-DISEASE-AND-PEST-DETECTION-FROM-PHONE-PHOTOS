@@ -98,9 +98,12 @@ def download() -> None:
     print("download complete", flush=True)
 
 
-def load_image(path: Path, size: int) -> np.ndarray:
-    # Same steps as the backend: fix rotation, RGB, straight resize.
+def load_image(path: Path, size: int, keep: float = 1.0) -> np.ndarray:
+    # Same steps as the backend: fix rotation, RGB, centre square crop, resize.
     image = ImageOps.exif_transpose(Image.open(path)).convert("RGB")
+    side = max(1, round(min(image.size) * keep))
+    left, top = (image.width - side) // 2, (image.height - side) // 2
+    image = image.crop((left, top, left + side, top + side))
     return np.asarray(image.resize((size, size), Image.Resampling.BILINEAR), dtype=np.float32)
 
 
@@ -116,12 +119,14 @@ def test_set(crop: str) -> tuple[list[Path], list[str]]:
     return paths, labels
 
 
-def evaluate(probabilities: np.ndarray, true_labels: list[str], classes: list[str], expected: dict) -> dict:
+def evaluate(
+    probabilities: np.ndarray, true_labels: list[str], classes: list[str], expected: dict, threshold: float = THRESHOLD
+) -> dict:
     predicted = np.array(classes)[probabilities.argmax(1)]
     confidence = probabilities.max(1)
     truth = np.array(true_labels)
     correct = np.array([predicted[i] == expected[label] for i, label in enumerate(truth)])
-    answered = confidence >= THRESHOLD
+    answered = confidence >= threshold
 
     per_label = {}
     for label, cls in expected.items():
@@ -149,7 +154,7 @@ def evaluate(probabilities: np.ndarray, true_labels: list[str], classes: list[st
         "class_order_confirmed": all(
             per_label[label]["top_predictions"][0][0] == cls for label, cls in expected.items()
         ),
-        "threshold": THRESHOLD,
+        "threshold": threshold,
         "photos_per_class": SAMPLE_PER_CLASS,
     }
 
@@ -164,7 +169,8 @@ def finish_card(card: dict, report: dict, expected: dict) -> dict:
             removed.append(cls)
         elif cls not in tested or report["per_label"][tested[cls]]["recall"] < MIN_RECALL:
             experimental.append(cls)
-    card["thresholds"] = {c: THRESHOLD for c in card["classes"] if c != "unknown" and c not in removed}
+    threshold = report["threshold"]
+    card["thresholds"] = {c: threshold for c in card["classes"] if c != "unknown" and c not in removed}
     card["experimental_classes"] = sorted(set(experimental) - {"healthy"})
     card["removed_classes"] = removed
     card.setdefault("metrics", {})["uganda_test"] = report
@@ -187,10 +193,14 @@ def run_evaluation(export: Path, crops: list[str]) -> None:
         output_index = interpreter.get_output_details()[0]["index"]
 
         paths, all_labels = test_set(crop)
+        missing = [label for label in spec["expected"] if label not in all_labels]
+        if missing:
+            print(f"STOP: {crop} has no photos for {missing}. Run download first.")
+            continue
         rows, labels, unreadable = [], [], 0
         for n, (path, label) in enumerate(zip(paths, all_labels), 1):
             try:
-                image = load_image(path, card["input_size"])
+                image = load_image(path, card["input_size"], card.get("center_crop", 1.0))
             except OSError:
                 unreadable += 1  # A few dataset files are corrupt.
                 continue
@@ -200,7 +210,9 @@ def run_evaluation(export: Path, crops: list[str]) -> None:
             labels.append(label)
             if n % 200 == 0:
                 print(f"  {crop}: {n}/{len(paths)}", flush=True)
-        report = evaluate(np.stack(rows), labels, card["classes"], spec["expected"])
+        report = evaluate(
+            np.stack(rows), labels, card["classes"], spec["expected"], card.get("default_threshold", THRESHOLD)
+        )
         report["unreadable_photos_skipped"] = unreadable
 
         print(f"\n== {crop}: accuracy {report['accuracy']}, answered {report['answered_share']}, "

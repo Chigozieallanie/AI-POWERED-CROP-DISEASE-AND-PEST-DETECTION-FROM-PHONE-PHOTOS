@@ -1,0 +1,254 @@
+{
+  "cassava": {
+    "author_claim": "Google CropNet notebook: 0.88 accuracy on 1,000 cassava test images (6 classes).",
+    "uganda_accuracy": 0.792,
+    "uganda_recall": {
+      "healthy": 0.843,
+      "cmd": 0.916,
+      "cbsd": 0.617
+    },
+    "threshold_sweep": [
+      {
+        "threshold": 0.5,
+        "answered_share": 0.932,
+        "confident_wrong_rate": 0.175,
+        "accuracy_when_answered": 0.825
+      },
+      {
+        "threshold": 0.6,
+        "answered_share": 0.848,
+        "confident_wrong_rate": 0.139,
+        "accuracy_when_answered": 0.861
+      },
+      {
+        "threshold": 0.7,
+        "answered_share": 0.784,
+        "confident_wrong_rate": 0.118,
+        "accuracy_when_answered": 0.882
+      },
+      {
+        "threshold": 0.8,
+        "answered_share": 0.705,
+        "confident_wrong_rate": 0.096,
+        "accuracy_when_answered": 0.904
+      },
+      {
+        "threshold": 0.85,
+        "answered_share": 0.645,
+        "confident_wrong_rate": 0.091,
+        "accuracy_when_answered": 0.909
+      },
+      {
+        "threshold": 0.9,
+        "answered_share": 0.565,
+        "confident_wrong_rate": 0.087,
+        "accuracy_when_answered": 0.913
+      },
+      {
+        "threshold": 0.95,
+        "answered_share": 0.44,
+        "confident_wrong_rate": 0.078,
+        "accuracy_when_answered": 0.922
+      }
+    ],
+    "best_threshold_for_5pct_wrong": null,
+    "wrong_crop_photos": {
+      "images": 900,
+      "confident_disease_share": 0.043,
+      "said_unknown_share": 0.94,
+      "most_common_wrong_labels": [
+        [
+          "cassava_green_mite",
+          37
+        ],
+        [
+          "cassava_bacterial_blight",
+          2
+        ]
+      ]
+    },
+    "bean_leaves": {
+      "images": 133,
+      "confident_disease_share": 0.0,
+      "said_unknown_share": 1.0,
+      "most_common_wrong_labels": []
+    },
+    "noise_and_blank_images": {
+      "images": 80,
+      "confident_disease_share": 0.0,
+      "said_unknown_share": 1.0,
+      "most_common_wrong_labels": []
+    },
+    "bad_photos": {
+      "photos": 180,
+      "original_accuracy": 0.839,
+      "blurry": {
+        "accuracy": 0.244,
+        "same_answer_as_original": 0.306
+      },
+      "dark": {
+        "accuracy": 0.55,
+        "same_answer_as_original": 0.611
+      },
+      "rotated_90": {
+        "accuracy": 0.867,
+        "same_answer_as_original": 0.878
+      },
+      "low_quality_jpeg": {
+        "accuracy": 0.744,
+        "same_answer_as_original": 0.822
+      },
+      "zoomed_in": {
+        "accuracy": 0.928,
+        "same_answer_as_original": 0.811
+      },
+      "zoomed_out": {
+        "accuracy": 0.8,
+        "same_answer_as_original": 0.944
+      }
+    },
+    "laptop_ms_per_photo": 46.7,
+    "size_mb": 8.6
+  },
+  "maize": {
+    "author_claim": "Julians30 model card: macro F1 0.948 on its own Ghana, Kenya and PlantVillage test data (9 classes).",
+    "uganda_accuracy": 0.497,
+    "uganda_recall": {
+      "healthy": 0.36,
+      "mlb": 0.453,
+      "msv": 0.677
+    },
+    "threshold_sweep": [
+      {
+        "threshold": 0.5,
+        "answered_share": 0.962,
+        "confident_wrong_rate": 0.498,
+        "accuracy_when_answered": 0.502
+      },
+      {
+        "threshold": 0.6,
+        "answered_share": 0.88,
+        "confident_wrong_rate": 0.491,
+        "accuracy_when_answered": 0.509
+      },
+      {
+        "threshold": 0.7,
+        "answered_share": 0.796,
+        "confident_wrong_rate": 0.483,
+        "accuracy_when_answered": 0.517
+      },
+      {
+        "threshold": 0.8,
+        "answered_share": 0.703,
+        "confident_wrong_rate": 0.488,
+        "accuracy_when_answered": 0.512
+      },
+      {
+        "threshold": 0.85,
+        "answered_share": 0.641,
+        "confident_wrong_rate": 0.49,
+        "accuracy_when_answered": 0.51
+      },
+      {
+        "threshold": 0.9,
+        "answered_share": 0.559,
+        "confident_wrong_rate": 0.481,
+        "accuracy_when_answered": 0.519
+      },
+      {
+        "threshold": 0.95,
+        "answered_share": 0.452,
+        "confident_wrong_rate": 0.459,
+        "accuracy_when_answered": 0.541
+      }
+    ],
+    "best_threshold_for_5pct_wrong": null,
+    "wrong_crop_photos": {
+      "images": 899,
+      "confident_disease_share": 0.664,
+      "said_unknown_share": 0.0,
+      "most_common_wrong_labels": [
+        [
+          "maize_leaf_spot",
+          257
+        ],
+        [
+          "maize_leaf_blight",
+          200
+        ],
+        [
+          "maize_streak_virus",
+          52
+        ]
+      ]
+    },
+    "bean_leaves": {
+      "images": 133,
+      "confident_disease_share": 0.789,
+      "said_unknown_share": 0.0,
+      "most_common_wrong_labels": [
+        [
+          "maize_leaf_spot",
+          71
+        ],
+        [
+          "fall_armyworm",
+          23
+        ],
+        [
+          "maize_leaf_blight",
+          11
+        ]
+      ]
+    },
+    "noise_and_blank_images": {
+      "images": 80,
+      "confident_disease_share": 0.375,
+      "said_unknown_share": 0.0,
+      "most_common_wrong_labels": [
+        [
+          "leaf_beetle",
+          19
+        ],
+        [
+          "maize_streak_virus",
+          6
+        ],
+        [
+          "maize_leaf_spot",
+          5
+        ]
+      ]
+    },
+    "bad_photos": {
+      "photos": 180,
+      "original_accuracy": 0.489,
+      "blurry": {
+        "accuracy": 0.233,
+        "same_answer_as_original": 0.55
+      },
+      "dark": {
+        "accuracy": 0.528,
+        "same_answer_as_original": 0.589
+      },
+      "rotated_90": {
+        "accuracy": 0.45,
+        "same_answer_as_original": 0.611
+      },
+      "low_quality_jpeg": {
+        "accuracy": 0.378,
+        "same_answer_as_original": 0.767
+      },
+      "zoomed_in": {
+        "accuracy": 0.711,
+        "same_answer_as_original": 0.489
+      },
+      "zoomed_out": {
+        "accuracy": 0.439,
+        "same_answer_as_original": 0.861
+      }
+    },
+    "laptop_ms_per_photo": 27.6,
+    "size_mb": 17.0
+  }
+}

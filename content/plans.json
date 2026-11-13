@@ -1,5 +1,30 @@
 [
-  {"name": "free", "monthly_quota": 100, "rate_limit_per_minute": 10, "features": {}},
-  {"name": "starter", "monthly_quota": 5000, "rate_limit_per_minute": 60, "features": {}},
-  {"name": "business", "monthly_quota": 50000, "rate_limit_per_minute": 300, "features": {"white_label": true}}
+ {
+  "name": "free",
+  "monthly_quota": 100,
+  "rate_limit_per_minute": 10,
+  "features": {
+   "worker_tools": false
+  },
+  "price_ugx": 0
+ },
+ {
+  "name": "starter",
+  "monthly_quota": 5000,
+  "rate_limit_per_minute": 60,
+  "features": {
+   "worker_tools": true
+  },
+  "price_ugx": 150000
+ },
+ {
+  "name": "business",
+  "monthly_quota": 50000,
+  "rate_limit_per_minute": 300,
+  "features": {
+   "white_label": true,
+   "worker_tools": true
+  },
+  "price_ugx": 600000
+ }
 ]

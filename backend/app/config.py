@@ -28,6 +28,16 @@ class Settings(BaseSettings):
     app_rate_limit_per_minute: int = 60
     login_rate_limit_per_minute: int = 10
 
+    # How sign-in codes reach phones. "log" writes them to the server log and is
+    # for development only; set a real provider before real users sign in.
+    otp_sender: str = "log"
+    otp_ttl_minutes: int = 10
+    otp_max_attempts: int = 5
+    otp_max_per_window: int = 3
+    otp_window_minutes: int = 10
+    session_days: int = 30
+    default_country_code: str = "256"
+
 
 @lru_cache
 def get_settings() -> Settings:

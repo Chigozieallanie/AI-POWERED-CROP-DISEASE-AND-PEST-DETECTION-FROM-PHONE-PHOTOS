@@ -13,7 +13,7 @@ from app.db import SessionLocal, get_db
 from app.errors import install_error_handlers
 from app.inference import ModelRegistry
 from app.models import UsageEvent
-from app.routers import mobile, partner
+from app.routers import mobile, partner, workers
 from app.security import IpRateLimiter
 
 UPLOAD_PATHS = ("/v1/diagnose", "/app/v1/contributions")
@@ -65,6 +65,7 @@ def create_app(registry: ModelRegistry | None = None) -> FastAPI:
 
     app.include_router(partner.router)
     app.include_router(mobile.router)
+    app.include_router(workers.router)
 
     @app.get("/healthz", tags=["Operations"])
     def healthz(request: Request, db: Session = Depends(get_db)) -> dict:

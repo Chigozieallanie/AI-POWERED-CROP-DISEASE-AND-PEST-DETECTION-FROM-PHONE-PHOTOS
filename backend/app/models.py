@@ -84,6 +84,7 @@ class Plan(Base):
     name: Mapped[str] = mapped_column(String(64), unique=True)
     monthly_quota: Mapped[int] = mapped_column(Integer)
     rate_limit_per_minute: Mapped[int] = mapped_column(Integer)
+    price_ugx: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     features: Mapped[dict] = mapped_column(JSON, default=dict)
 
     def __str__(self) -> str:
@@ -290,3 +291,137 @@ class Report(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
+
+
+class WorkerRole(StrEnum):
+    worker = "worker"
+    admin = "admin"
+
+
+class UpgradeStatus(StrEnum):
+    pending = "pending"
+    approved = "approved"
+    rejected = "rejected"
+
+
+class Worker(Base):
+    """A paid-tier user, such as an extension worker. Staff or an organisation admin adds them."""
+
+    __tablename__ = "workers"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    tenant_id: Mapped[int] = mapped_column(ForeignKey("tenants.id", ondelete="CASCADE"))
+    phone: Mapped[str] = mapped_column(String(16), unique=True)
+    name: Mapped[str] = mapped_column(String(200))
+    role: Mapped[WorkerRole] = mapped_column(enum_column(WorkerRole), default=WorkerRole.worker)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    tenant: Mapped[Tenant] = relationship(lazy="joined")
+
+    def __str__(self) -> str:
+        return f"{self.name} ({self.phone})"
+
+
+class OtpCode(Base):
+    __tablename__ = "otp_codes"
+    __table_args__ = (Index("ix_otp_codes_phone_created", "phone", "created_at"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    phone: Mapped[str] = mapped_column(String(16))
+    code_hash: Mapped[str] = mapped_column(String(64))
+    attempts: Mapped[int] = mapped_column(Integer, default=0)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    consumed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+class WorkerSession(Base):
+    __tablename__ = "worker_sessions"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    worker_id: Mapped[int] = mapped_column(ForeignKey("workers.id", ondelete="CASCADE"))
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    worker: Mapped[Worker] = relationship(lazy="joined")
+
+
+class Farmer(Base):
+    __tablename__ = "farmers"
+    __table_args__ = (Index("ix_farmers_tenant_name", "tenant_id", "name"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    tenant_id: Mapped[int] = mapped_column(ForeignKey("tenants.id", ondelete="CASCADE"))
+    created_by: Mapped[int | None] = mapped_column(ForeignKey("workers.id", ondelete="SET NULL"))
+    name: Mapped[str] = mapped_column(String(200))
+    phone: Mapped[str | None] = mapped_column(String(16))
+    village: Mapped[str | None] = mapped_column(String(120))
+    district: Mapped[str | None] = mapped_column(String(100))
+    notes: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class FarmerScan(Base):
+    """A diagnosis result synced from the app. No photos and no coordinates are stored."""
+
+    __tablename__ = "farmer_scans"
+    __table_args__ = (
+        UniqueConstraint("tenant_id", "client_id"),
+        Index("ix_farmer_scans_tenant_scanned", "tenant_id", "scanned_at"),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    tenant_id: Mapped[int] = mapped_column(ForeignKey("tenants.id", ondelete="CASCADE"))
+    farmer_id: Mapped[int] = mapped_column(ForeignKey("farmers.id", ondelete="CASCADE"))
+    worker_id: Mapped[int | None] = mapped_column(ForeignKey("workers.id", ondelete="SET NULL"))
+    client_id: Mapped[str] = mapped_column(String(64))
+    crop: Mapped[Crop] = mapped_column(enum_column(Crop))
+    verdict: Mapped[str] = mapped_column(String(32))
+    primary_class: Mapped[str | None] = mapped_column(String(64))
+    findings: Mapped[list] = mapped_column(JSON, default=list)
+    model_version: Mapped[str] = mapped_column(String(32))
+    scanned_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+class UpgradeRequest(Base):
+    __tablename__ = "upgrade_requests"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    tenant_id: Mapped[int] = mapped_column(ForeignKey("tenants.id", ondelete="CASCADE"))
+    requested_by: Mapped[int | None] = mapped_column(ForeignKey("workers.id", ondelete="SET NULL"))
+    plan_id: Mapped[int] = mapped_column(ForeignKey("plans.id"))
+    payment_reference: Mapped[str] = mapped_column(String(100))
+    payer_phone: Mapped[str] = mapped_column(String(16))
+    status: Mapped[UpgradeStatus] = mapped_column(
+        enum_column(UpgradeStatus), default=UpgradeStatus.pending
+    )
+    staff_note: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    decided_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    tenant: Mapped[Tenant] = relationship(lazy="joined")
+    plan: Mapped[Plan] = relationship(lazy="joined")
+
+    def __str__(self) -> str:
+        return f"#{self.id} {self.status}"

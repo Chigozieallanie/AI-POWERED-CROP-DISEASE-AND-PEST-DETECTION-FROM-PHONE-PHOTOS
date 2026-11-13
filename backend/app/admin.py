@@ -1,4 +1,5 @@
 import hmac
+from datetime import UTC, datetime
 from html import escape
 
 from fastapi import FastAPI, Request
@@ -14,6 +15,8 @@ from app.models import (
     ApiKey,
     Contribution,
     DiagnosisLog,
+    Farmer,
+    FarmerScan,
     ModelVersion,
     Pack,
     Place,
@@ -21,10 +24,14 @@ from app.models import (
     ProblemClass,
     Report,
     Tenant,
+    UpgradeRequest,
+    UpgradeStatus,
     UsageEvent,
+    Worker,
 )
 from app.packs import publish_content_pack
 from app.security import IpRateLimiter, client_ip, new_key
+from app.workers_auth import normalise_phone
 
 
 class StaffAuth(AuthenticationBackend):
@@ -194,6 +201,86 @@ class DiagnosisLogAdmin(ReadOnlyView, model=DiagnosisLog):
     column_default_sort = ("created_at", True)
 
 
+class WorkerAdmin(ModelView, model=Worker):
+    column_list = [Worker.id, Worker.name, Worker.phone, Worker.tenant, Worker.role, Worker.is_active]
+    column_searchable_list = [Worker.name, Worker.phone]
+    form_columns = [Worker.tenant, Worker.name, Worker.phone, Worker.role, Worker.is_active]
+
+    async def on_model_change(self, data: dict, model: Worker, is_created: bool, request: Request) -> None:
+        if data.get("phone"):
+            data["phone"] = normalise_phone(str(data["phone"]), get_settings().default_country_code)
+
+
+class FarmerAdmin(ModelView, model=Farmer):
+    can_create = False
+    can_edit = False
+    column_list = [Farmer.id, Farmer.name, Farmer.village, Farmer.district, Farmer.tenant_id, Farmer.created_at]
+    column_searchable_list = [Farmer.name, Farmer.village]
+
+
+class FarmerScanAdmin(ReadOnlyView, model=FarmerScan):
+    column_list = [
+        FarmerScan.id,
+        FarmerScan.tenant_id,
+        FarmerScan.farmer_id,
+        FarmerScan.crop,
+        FarmerScan.verdict,
+        FarmerScan.primary_class,
+        FarmerScan.scanned_at,
+    ]
+    column_default_sort = ("scanned_at", True)
+
+
+def _decide_upgrade(request_id: int, approve: bool) -> None:
+    with SessionLocal() as db:
+        upgrade = db.get(UpgradeRequest, request_id)
+        if upgrade is None or upgrade.status != UpgradeStatus.pending:
+            raise ValueError("Only pending requests can be decided.")
+        upgrade.status = UpgradeStatus.approved if approve else UpgradeStatus.rejected
+        upgrade.decided_at = datetime.now(UTC)
+        if approve:
+            upgrade.tenant.plan_id = upgrade.plan_id
+        db.commit()
+
+
+class UpgradeRequestAdmin(ModelView, model=UpgradeRequest):
+    can_create = False
+    column_list = [
+        UpgradeRequest.id,
+        UpgradeRequest.tenant,
+        UpgradeRequest.plan,
+        UpgradeRequest.payment_reference,
+        UpgradeRequest.payer_phone,
+        UpgradeRequest.status,
+        UpgradeRequest.created_at,
+    ]
+    column_default_sort = ("created_at", True)
+    form_columns = [UpgradeRequest.staff_note]
+
+    async def _decide(self, request: Request, approve: bool) -> Response:
+        pks = [pk for pk in request.query_params.get("pks", "").split(",") if pk.isdigit()]
+        for pk in pks:
+            try:
+                await run_in_threadpool(_decide_upgrade, int(pk), approve)
+            except ValueError as error:
+                return HTMLResponse(f"<p>{escape(str(error))}</p>", status_code=409)
+        return RedirectResponse(request.url_for("admin:list", identity="upgrade-request"), status_code=303)
+
+    @action(
+        name="approve",
+        label="Approve: payment received",
+        confirmation_message="Only approve after checking the mobile money payment arrived.",
+        add_in_detail=True,
+        add_in_list=False,
+    )
+    async def approve(self, request: Request) -> Response:
+        return await self._decide(request, True)
+
+    @action(name="reject", label="Reject", add_in_detail=True, add_in_list=False)
+    async def reject(self, request: Request) -> Response:
+        return await self._decide(request, False)
+
+
 def install_admin(app: FastAPI, settings: Settings) -> None:
     admin = Admin(app, engine, authentication_backend=StaffAuth(settings), title="Crop admin")
     for view in (
@@ -209,5 +296,9 @@ def install_admin(app: FastAPI, settings: Settings) -> None:
         ContributionAdmin,
         UsageAdmin,
         DiagnosisLogAdmin,
+        WorkerAdmin,
+        FarmerAdmin,
+        FarmerScanAdmin,
+        UpgradeRequestAdmin,
     ):
         admin.add_view(view)

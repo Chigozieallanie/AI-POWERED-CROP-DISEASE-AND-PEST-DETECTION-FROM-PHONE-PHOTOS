@@ -69,7 +69,8 @@ def clean_database(migrated):
         connection.execute(
             text(
                 "TRUNCATE plans, tenants, api_keys, usage_counters, usage_events, classes, advice,"
-                " places, model_versions, packs, diagnosis_log, contributions, reports"
+                " places, model_versions, packs, diagnosis_log, contributions, reports, workers, otp_codes,"
+                " worker_sessions, farmers, farmer_scans, upgrade_requests"
                 " RESTART IDENTITY CASCADE"
             )
         )

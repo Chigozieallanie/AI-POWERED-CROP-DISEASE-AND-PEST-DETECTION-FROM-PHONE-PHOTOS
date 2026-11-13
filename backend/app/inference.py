@@ -25,6 +25,8 @@ class ModelCard:
     temperature: float
     thresholds: dict[str, float]
     experimental_classes: list[str]
+    # Share of the photo's centre kept before resizing. 1.0 keeps the whole photo.
+    center_crop: float = 1.0
 
     @classmethod
     def from_file(cls, path: Path) -> "ModelCard":
@@ -37,6 +39,7 @@ class ModelCard:
             temperature=float(data["temperature"]),
             thresholds={k: float(v) for k, v in data["thresholds"].items()},
             experimental_classes=list(data.get("experimental_classes", [])),
+            center_crop=float(data.get("center_crop", 1.0)),
         )
 
 
@@ -133,13 +136,21 @@ def quality_status(image: Image.Image, settings: Settings) -> str | None:
     return None
 
 
-def _batch(image: Image.Image, size: int) -> np.ndarray:
-    resized = image.resize((size, size), Image.Resampling.BILINEAR)
+def center_square(image: Image.Image, keep: float) -> Image.Image:
+    """Crop the centre square that keeps `keep` of the shorter side."""
+    side = max(1, round(min(image.size) * keep))
+    left = (image.width - side) // 2
+    top = (image.height - side) // 2
+    return image.crop((left, top, left + side, top + side))
+
+
+def _batch(image: Image.Image, size: int, keep: float = 1.0) -> np.ndarray:
+    resized = center_square(image, keep).resize((size, size), Image.Resampling.BILINEAR)
     return np.expand_dims(np.asarray(resized, dtype=np.float32), 0)
 
 
 def _top(model: Model, image: Image.Image) -> tuple[str, float]:
-    raw = model.predict(_batch(image, model.card.input_size))[0]
+    raw = model.predict(_batch(image, model.card.input_size, model.card.center_crop))[0]
     calibrated = calibrate(raw, model.card.temperature)
     best = int(calibrated.argmax())
     return model.card.classes[best], float(calibrated[best])
