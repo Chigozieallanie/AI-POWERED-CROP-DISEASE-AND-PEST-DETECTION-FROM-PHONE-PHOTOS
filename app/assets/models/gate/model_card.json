@@ -1,0 +1,55 @@
+{
+  "name": "gate",
+  "version": "0.2.0",
+  "input_size": 224,
+  "classes": [
+    "cassava_leaf",
+    "maize_leaf",
+    "other"
+  ],
+  "temperature": 1.0,
+  "thresholds": {},
+  "experimental_classes": [],
+  "sha256": "137147478f889d3e38dfaa60f3dfd47f50eb0c55c66c22d3fc7f65fa494e41d8",
+  "metrics": {
+    "test": {
+      "test_photos": 455,
+      "recall": {
+        "cassava_leaf": 1.0,
+        "maize_leaf": 0.993,
+        "other": 0.986
+      },
+      "confusion_rows_true_cols_predicted": {
+        "classes": [
+          "cassava_leaf",
+          "maize_leaf",
+          "other"
+        ],
+        "matrix": [
+          [
+            90,
+            0,
+            0
+          ],
+          [
+            0,
+            151,
+            1
+          ],
+          [
+            2,
+            1,
+            210
+          ]
+        ]
+      },
+      "other_wrongly_accepted_rate": 0.0141,
+      "leaf_wrongly_rejected_rate": 0.0083,
+      "wrong_crop_accepted_rate": 0.0,
+      "gate_min_score": 0.6
+    },
+    "tflite_agreement": 1.0
+  },
+  "source": "Trained in notebook 02 on Makerere/NaCRRI cassava and maize (CC0), COCO 2017 val, Makerere beans (MIT)",
+  "licence": "Own model. COCO images keep their Flickr licences."
+}

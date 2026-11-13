@@ -10,3 +10,14 @@ ml/gate_photos.zip
 *.log
 converted_models.zip
 ml/gate_photos.zip
+ml/maize_photos.zip
+ml/upload/
+ml/export_v2/
+gate_model.zip
+maize_finetuned.zip
+ml/faw_photos.zip
+ml/gate_faw.zip
+ml/fetch_faw.log
+ml/export_v3/
+gate_model*.zip
+maize_finetuned*.zip

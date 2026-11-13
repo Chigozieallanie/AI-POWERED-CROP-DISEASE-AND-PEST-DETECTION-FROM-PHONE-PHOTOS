@@ -51,11 +51,16 @@ def to_array(image):
 
 
 images, labels = [], []
-with zipfile.ZipFile("/content/gate_photos.zip") as bundle:
-    for name in bundle.namelist():
-        if name.endswith(".jpg"):
-            images.append(to_array(Image.open(io.BytesIO(bundle.read(name)))))
-            labels.append(CLASSES.index(name.split("/")[0]))
+# gate_faw.zip (optional) adds fall armyworm maize photos as maize leaves.
+for archive in ("/content/gate_photos.zip", "/content/gate_faw.zip"):
+    if not Path(archive).exists():
+        print("not found, skipped:", archive)
+        continue
+    with zipfile.ZipFile(archive) as bundle:
+        for name in bundle.namelist():
+            if name.endswith(".jpg"):
+                images.append(to_array(Image.open(io.BytesIO(bundle.read(name)))))
+                labels.append(CLASSES.index(name.split("/")[0]))
 print("leaf photos:", len(images))
 
 coco = pd.read_parquet(
@@ -123,13 +128,13 @@ x = tf.keras.layers.Dropout(0.2)(x)
 outputs = tf.keras.layers.Dense(len(CLASSES), activation="softmax")(x)
 model = tf.keras.Model(inputs, outputs)
 
-model.compile(tf.keras.optimizers.Adam(1e-3), "sparse_categorical_crossentropy", ["accuracy"])
+model.compile(optimizer=tf.keras.optimizers.Adam(1e-3), loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 model.fit(train_ds, validation_data=val_ds, epochs=6, class_weight=class_weight, verbose=2)
 
 base.trainable = True
 for layer in base.layers[:-30]:
     layer.trainable = False
-model.compile(tf.keras.optimizers.Adam(1e-5), "sparse_categorical_crossentropy", ["accuracy"])
+model.compile(optimizer=tf.keras.optimizers.Adam(1e-5), loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 model.fit(
     train_ds, validation_data=val_ds, epochs=6, class_weight=class_weight, verbose=2,
     callbacks=[tf.keras.callbacks.EarlyStopping(patience=2, restore_best_weights=True)],
@@ -161,6 +166,7 @@ GATE_METRICS = {
     "gate_min_score": GATE_MIN_SCORE,
 }
 print(json.dumps(GATE_METRICS, indent=1))
+assert min(recall.values()) >= 0.8, "Leaf check is too weak. Do not ship."
 
 # %% [markdown]
 # ## 5. Convert, check, download
@@ -200,7 +206,7 @@ assert agreement >= 0.98, "Conversion changed results. Do not ship."
 
 card = {
     "name": "gate",
-    "version": "0.1.0",
+    "version": "0.2.0" if Path("/content/gate_faw.zip").exists() else "0.1.0",
     "input_size": SIZE,
     "classes": CLASSES,
     "temperature": 1.0,

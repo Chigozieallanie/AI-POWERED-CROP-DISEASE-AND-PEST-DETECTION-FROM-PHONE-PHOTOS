@@ -15,12 +15,14 @@
 # Unzip it into `ml/export/` in the project.
 
 # %%
-# Install. torchao must match Colab's PyTorch 2.9, or the converter fails to import.
+# Install. torchao must match the installed PyTorch, or the converter fails to import.
 import os
 from pathlib import Path
 
 if not Path("/content/.crop_installed").exists():
-    !pip -q install timm huggingface_hub tensorflow_hub ai-edge-litert litert-torch "torchao==0.14.1" datasets
+    !pip -q install timm huggingface_hub tensorflow_hub ai-edge-litert litert-torch datasets
+    # litert-torch may upgrade PyTorch; torchao must then match the new version.
+    !pip -q install -U torchao
     Path("/content/.crop_installed").touch()
     os.kill(os.getpid(), 9)  # Restart once so the new libraries load cleanly.
 

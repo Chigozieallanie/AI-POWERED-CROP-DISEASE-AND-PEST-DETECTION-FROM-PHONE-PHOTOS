@@ -193,7 +193,15 @@ def run_evaluation(export: Path, crops: list[str]) -> None:
         output_index = interpreter.get_output_details()[0]["index"]
 
         paths, all_labels = test_set(crop)
-        missing = [label for label in spec["expected"] if label not in all_labels]
+        expected = dict(spec["expected"])
+        faw_list = Path(__file__).resolve().parent / "faw_test_list.txt"
+        if crop == "maize" and "fall_armyworm" in card["classes"] and faw_list.exists():
+            # Held-back KaraAgro fall armyworm photos (see make_faw_photos.py).
+            faw = [DATA / "faw" / line for line in faw_list.read_text().split() if line]
+            paths, all_labels = paths + faw, all_labels + ["faw"] * len(faw)
+            expected["faw"] = "fall_armyworm"
+            print(f"maize faw: testing {len(faw)} held-back photos", flush=True)
+        missing = [label for label in expected if label not in all_labels]
         if missing:
             print(f"STOP: {crop} has no photos for {missing}. Run download first.")
             continue
@@ -211,7 +219,7 @@ def run_evaluation(export: Path, crops: list[str]) -> None:
             if n % 200 == 0:
                 print(f"  {crop}: {n}/{len(paths)}", flush=True)
         report = evaluate(
-            np.stack(rows), labels, card["classes"], spec["expected"], card.get("default_threshold", THRESHOLD)
+            np.stack(rows), labels, card["classes"], expected, card.get("default_threshold", THRESHOLD)
         )
         report["unreadable_photos_skipped"] = unreadable
 
@@ -222,7 +230,7 @@ def run_evaluation(export: Path, crops: list[str]) -> None:
         if not report["class_order_confirmed"]:
             print(f"  STOP: {crop} class order not confirmed. Card left unchanged.")
             continue
-        card_path.write_text(json.dumps(finish_card(card, report, spec["expected"]), indent=2))
+        card_path.write_text(json.dumps(finish_card(card, report, expected), indent=2))
         print(f"  experimental: {card['experimental_classes']} | removed: {card['removed_classes']}")
 
 

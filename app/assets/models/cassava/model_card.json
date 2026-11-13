@@ -1,0 +1,113 @@
+{
+  "name": "cassava",
+  "version": "0.1.0",
+  "input_size": 224,
+  "classes": [
+    "cassava_bacterial_blight",
+    "cassava_brown_streak",
+    "cassava_green_mite",
+    "cassava_mosaic",
+    "healthy",
+    "unknown"
+  ],
+  "temperature": 1.0,
+  "thresholds": {
+    "cassava_bacterial_blight": 0.8,
+    "cassava_brown_streak": 0.8,
+    "cassava_mosaic": 0.8,
+    "healthy": 0.8
+  },
+  "experimental_classes": [
+    "cassava_bacterial_blight"
+  ],
+  "removed_classes": [
+    "cassava_green_mite"
+  ],
+  "sha256": "d0799291b3e16ae07f9519bed87fbb24f29aff82180fd8b382c8a8c5a2912e1f",
+  "metrics": {
+    "tflite_agreement": {
+      "top1_agreement": 1.0,
+      "max_abs_diff": 0.0
+    },
+    "uganda_test": {
+      "accuracy": 0.902,
+      "answered_share": 0.848,
+      "answered_accuracy": 0.953,
+      "confident_wrong_rate": 0.047,
+      "confident_wrong_by_class": {
+        "cassava_brown_streak": 0.024,
+        "cassava_green_mite": 1.0,
+        "cassava_mosaic": 0.0,
+        "healthy": 0.049
+      },
+      "per_label": {
+        "healthy": {
+          "n": 300,
+          "recall": 0.94,
+          "answered_recall": 0.977,
+          "top_predictions": [
+            [
+              "healthy",
+              282
+            ],
+            [
+              "cassava_brown_streak",
+              9
+            ],
+            [
+              "cassava_green_mite",
+              7
+            ]
+          ]
+        },
+        "cmd": {
+          "n": 299,
+          "recall": 0.94,
+          "answered_recall": 0.951,
+          "top_predictions": [
+            [
+              "cassava_mosaic",
+              281
+            ],
+            [
+              "cassava_green_mite",
+              9
+            ],
+            [
+              "unknown",
+              4
+            ]
+          ]
+        },
+        "cbsd": {
+          "n": 300,
+          "recall": 0.827,
+          "answered_recall": 0.928,
+          "top_predictions": [
+            [
+              "cassava_brown_streak",
+              248
+            ],
+            [
+              "healthy",
+              36
+            ],
+            [
+              "cassava_green_mite",
+              7
+            ]
+          ]
+        }
+      },
+      "class_order_confirmed": true,
+      "threshold": 0.8,
+      "photos_per_class": 300,
+      "unreadable_photos_skipped": 1
+    }
+  },
+  "source": "https://tfhub.dev/google/cropnet/classifier/cassava_disease_V1/2",
+  "licence": "unconfirmed",
+  "notes": "Google CropNet. Centre 60% crop and threshold 0.8 chosen on Ugandan photos and confirmed on 696 unused ones (90% correct, 4.8% confident wrong). Licence must be confirmed before commercial use.",
+  "center_crop": 0.6,
+  "default_threshold": 0.8
+}

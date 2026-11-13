@@ -1,0 +1,249 @@
+{
+  "name": "maize",
+  "version": "0.3.0",
+  "input_size": 224,
+  "classes": [
+    "fall_armyworm",
+    "grasshopper",
+    "healthy",
+    "leaf_beetle",
+    "maize_leaf_blight",
+    "maize_leaf_spot",
+    "maize_lethal_necrosis",
+    "maize_rust",
+    "maize_streak_virus"
+  ],
+  "temperature": 1.0,
+  "center_crop": 0.6,
+  "default_threshold": 0.8,
+  "thresholds": {
+    "fall_armyworm": 0.8,
+    "grasshopper": 0.8,
+    "healthy": 0.8,
+    "leaf_beetle": 0.8,
+    "maize_leaf_blight": 0.8,
+    "maize_leaf_spot": 0.8,
+    "maize_lethal_necrosis": 0.8,
+    "maize_rust": 0.8,
+    "maize_streak_virus": 0.8
+  },
+  "experimental_classes": [
+    "fall_armyworm",
+    "grasshopper",
+    "leaf_beetle",
+    "maize_leaf_spot",
+    "maize_lethal_necrosis",
+    "maize_rust"
+  ],
+  "removed_classes": [],
+  "sha256": "2c3c69b643d17285d5e6597a848b8266c4c1544f86355f1aa1a6301795ca5a30",
+  "metrics": {
+    "check_split_before": [
+      0.643,
+      {
+        "fall_armyworm": 0.409,
+        "healthy": 0.726,
+        "leaf_blight": 0.533,
+        "streak_virus": 0.83
+      }
+    ],
+    "check_split_after": [
+      0.974,
+      {
+        "fall_armyworm": 0.989,
+        "healthy": 0.978,
+        "leaf_blight": 0.941,
+        "streak_virus": 0.993
+      }
+    ],
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.9677,
+        "check_accuracy": 0.952,
+        "recall": {
+          "fall_armyworm": 0.935,
+          "healthy": 0.97,
+          "leaf_blight": 0.933,
+          "streak_virus": 0.963
+        }
+      },
+      {
+        "epoch": 2,
+        "loss": 0.6185,
+        "check_accuracy": 0.95,
+        "recall": {
+          "fall_armyworm": 0.946,
+          "healthy": 0.97,
+          "leaf_blight": 0.904,
+          "streak_virus": 0.978
+        }
+      },
+      {
+        "epoch": 3,
+        "loss": 0.5256,
+        "check_accuracy": 0.96,
+        "recall": {
+          "fall_armyworm": 0.978,
+          "healthy": 0.963,
+          "leaf_blight": 0.941,
+          "streak_virus": 0.963
+        }
+      },
+      {
+        "epoch": 4,
+        "loss": 0.4734,
+        "check_accuracy": 0.97,
+        "recall": {
+          "fall_armyworm": 0.957,
+          "healthy": 0.978,
+          "leaf_blight": 0.956,
+          "streak_virus": 0.985
+        }
+      },
+      {
+        "epoch": 5,
+        "loss": 0.4458,
+        "check_accuracy": 0.97,
+        "recall": {
+          "fall_armyworm": 0.978,
+          "healthy": 0.97,
+          "leaf_blight": 0.948,
+          "streak_virus": 0.985
+        }
+      },
+      {
+        "epoch": 6,
+        "loss": 0.4198,
+        "check_accuracy": 0.974,
+        "recall": {
+          "fall_armyworm": 0.989,
+          "healthy": 0.978,
+          "leaf_blight": 0.941,
+          "streak_virus": 0.993
+        }
+      },
+      {
+        "epoch": 7,
+        "loss": 0.4165,
+        "check_accuracy": 0.974,
+        "recall": {
+          "fall_armyworm": 1.0,
+          "healthy": 0.963,
+          "leaf_blight": 0.948,
+          "streak_virus": 0.993
+        }
+      },
+      {
+        "epoch": 8,
+        "loss": 0.4101,
+        "check_accuracy": 0.97,
+        "recall": {
+          "fall_armyworm": 0.978,
+          "healthy": 0.963,
+          "leaf_blight": 0.948,
+          "streak_virus": 0.993
+        }
+      }
+    ],
+    "tflite_agreement": 1.0,
+    "training_photos": 2824,
+    "uganda_test": {
+      "accuracy": 0.968,
+      "answered_share": 0.899,
+      "answered_accuracy": 0.995,
+      "confident_wrong_rate": 0.005,
+      "confident_wrong_by_class": {
+        "fall_armyworm": 0.007,
+        "healthy": 0.007,
+        "maize_leaf_blight": 0.004,
+        "maize_streak_virus": 0.0
+      },
+      "per_label": {
+        "healthy": {
+          "n": 300,
+          "recall": 0.987,
+          "answered_recall": 0.997,
+          "top_predictions": [
+            [
+              "healthy",
+              296
+            ],
+            [
+              "maize_leaf_blight",
+              3
+            ],
+            [
+              "maize_streak_virus",
+              1
+            ]
+          ]
+        },
+        "mlb": {
+          "n": 300,
+          "recall": 0.937,
+          "answered_recall": 0.984,
+          "top_predictions": [
+            [
+              "maize_leaf_blight",
+              281
+            ],
+            [
+              "healthy",
+              7
+            ],
+            [
+              "maize_streak_virus",
+              5
+            ]
+          ]
+        },
+        "msv": {
+          "n": 300,
+          "recall": 0.99,
+          "answered_recall": 1.0,
+          "top_predictions": [
+            [
+              "maize_streak_virus",
+              297
+            ],
+            [
+              "healthy",
+              2
+            ],
+            [
+              "grasshopper",
+              1
+            ]
+          ]
+        },
+        "faw": {
+          "n": 155,
+          "recall": 0.948,
+          "answered_recall": 1.0,
+          "top_predictions": [
+            [
+              "fall_armyworm",
+              147
+            ],
+            [
+              "healthy",
+              3
+            ],
+            [
+              "grasshopper",
+              2
+            ]
+          ]
+        }
+      },
+      "class_order_confirmed": true,
+      "threshold": 0.8,
+      "photos_per_class": 300,
+      "unreadable_photos_skipped": 0
+    }
+  },
+  "source": "Julians30/maize-disease-models mobilenetv3_best.pth, fine-tuned on Makerere/NaCRRI maize photos (CC0)",
+  "licence": "Apache-2.0 base model; Ugandan photos CC0.",
+  "notes": "Fine-tuned on Ugandan healthy/blight/streak (Makerere, NaCRRI) and KaraAgro fall armyworm (Ghana). Fall armyworm stays experimental until tested on Ugandan armyworm photos."
+}
