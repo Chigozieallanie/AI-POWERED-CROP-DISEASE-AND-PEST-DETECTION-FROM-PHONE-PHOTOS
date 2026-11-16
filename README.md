@@ -1,4 +1,4 @@
-# CropCheck 🌱
+# CropCheck 
 
 **CropCheck** is a phone-based crop health project built to help farmers and field workers make a first check for crop disease or pest damage from photos. The app is designed to run its image models on the phone, so a connection to the backend is not required for diagnosis. It also brings together practical advice and nearby agricultural support.
 
