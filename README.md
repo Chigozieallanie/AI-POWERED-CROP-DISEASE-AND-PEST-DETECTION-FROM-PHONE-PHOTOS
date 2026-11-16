@@ -12,7 +12,7 @@ This repository contains the Flutter app, a FastAPI service, and the machine-lea
 - Use phone location to help find nearby agricultural services.
 - Run a separate backend for partner integrations, app content/model updates, place data, and staff administration.
 
-The current app and model work focuses on **cassava and maize**, including fall armyworm checks for maize. The diagnosis is an aid—not a substitute for an agronomist or extension worker. If a photo is unclear or a result is uncertain, seek local expert advice before taking action.
+The current app and model work focuses on **cassava and maize**, including fall army worm checks for maize. The diagnosis is an aid—not a substitute for an agronomist or extension worker. If a photo is unclear or a result is uncertain, seek local expert advice before taking action.
 
 ## How the pieces fit together
 
